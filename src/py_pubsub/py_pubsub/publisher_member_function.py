@@ -1,3 +1,16 @@
+# Copyright 2016 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import rclpy
 from rclpy.node import Node
@@ -34,7 +47,7 @@ class MinimalPublisher(Node):
         gt = self.retrieve_frames(self.indx)
 
         msg = String()
-        msg.data = 'The gate is in square number %d' % gt
+        msg.data = 'The gate is in square number %s' % gt
         self.pub.publish(msg)
         self.get_logger().info('logger Publishing: "%s"' % msg.data)
         msg.data = ""
@@ -80,6 +93,7 @@ class MinimalPublisher(Node):
             [0,350,193,477,'7'],
             [194,351,437,478,'8'],
             [436,351,638,478,'9']]
+
         x = 0 # for sqaure indicator
 
         for contour in contours:
@@ -92,6 +106,7 @@ class MinimalPublisher(Node):
         my_list.sort()
 
         if len(contours)==3:
+
             cv2.rectangle(frame, (my_list[0][0], my_list[0][1]), (my_list[2][0] + my_list[2][2], my_list[2][1] + my_list[2][3]),(0, 0, 255), 1)
             x= int(my_list[1][0] - (my_list[0][0] + my_list[0][2]))
             y= int(my_list[2][0] -(my_list[1][0] + my_list[1][2]))
@@ -99,41 +114,49 @@ class MinimalPublisher(Node):
                 cv2.rectangle(frame, (my_list[0][0], my_list[0][1]),
                             (my_list[1][0] + my_list[1][2], my_list[1][1] + my_list[1][3]), (0, 255, 255), 1)
                 cv2.putText(frame, "{}".format("Bonus"), (int(my_list[0][0])+20, int(my_list[0][1])-10), cv2.FONT_ITALIC, 2, (0, 255, 255))
+                x = int(int(my_list[0][0] + my_list[1][0] + my_list[1][2])/2)
+                y = int(int(my_list[0][1] + my_list[1][1] + my_list[1][3])/2)
+
             else:
                 cv2.rectangle(frame, (my_list[1][0], my_list[1][1]),
                             (my_list[2][0] + my_list[2][2], my_list[2][1] + my_list[2][3]), (0, 255, 255), 1)
                 
                 cv2.putText(frame, "{}".format("Bonus"), (int(my_list[1][0]) + 20, int(my_list[1][1]) - 10),
                             cv2.FONT_ITALIC, 2, (0, 255, 255))
-                end_x = my_list[2][0] + my_list[2][2]
-                end_y = my_list[2][1] + my_list[2][3]
-                if(l[0][0]<=my_list[1][0]<=l[0][2] and l[0][1]<=end_y<=l[0][3]):
-                    x = l[0][4]
-                elif (l[1][0]<=my_list[1][0]<=l[1][2] and l[1][1]<=end_y<=l[1][3]):
-                    x = l[1][4]
-                elif(l[2][0]<=my_list[1][0]<=l[2][2] and l[2][1]<=end_y<=l[2][3]):
-                    x = l[2][4]
-                elif(l[3][0]<=my_list[1][0]<=l[3][2] and l[3][1]<=end_y<=l[3][3]):
-                    x = l[3][4]
-                elif(l[4][0]<=my_list[1][0]<=l[4][2] and l[4][1]<=end_y<=l[4][3]):
-                    x = l[4][4]
-                elif(l[5][0]<=my_list[1][0]<=l[5][2] and l[5][1]<=end_y<=l[5][3]):
-                    x = l[5][4]
-                elif(l[6][0]<=my_list[1][0]<=l[6][2] and l[6][1]<=end_y<=l[6][3]):
-                    x = l[6][4]
-                elif(l[7][0]<=my_list[1][0]<=l[7][2] and l[7][1]<=end_y<=l[7][3]):
-                    x = l[7][4]
-                elif(l[8][0]<=my_list[1][0]<=l[8][2] and l[8][1]<=end_y<=l[8][3]):
-                    x = l[8][4]
-                elif(l[9][0]<=my_list[1][0]<=l[9][2] and l[9][1]<=end_y<=l[9][3]):
-                    x = l[9][4]
+                x = int(int(my_list[1][0] + my_list[2][0] + my_list[2][2])/2)
+                y = int(int(my_list[1][1] + my_list[2][1] + my_list[2][3])/2)
+
+          #  self.get_logger().info('"%d"',x)
+          #  self.get_logger().info('"%d"',y)
+
+            end_x = my_list[2][0] + my_list[2][2]
+            end_y = my_list[2][3] + my_list[2][1]
+            if( l[0][0] <= x <= l[0][2] and l[0][1] <= y <= l[0][3]):
+                x = l[0][4]
+            elif (l[1][0] <= x <= l[1][2] and l[1][1] <= y <= l[1][3]):
+                x = l[1][4]
+            elif(l[2][0] <= x <= l[2][2] and l[2][1] <= y <= l[2][3]):
+                x = l[2][4]
+            elif(l[3][0] <= x <= l[3][2] and l[3][1] <= y <= l[3][3]):
+                x = l[3][4]
+            elif(l[4][0] <= x <= l[4][2] and l[4][1] <= y <= l[4][3]):
+                x = l[4][4]
+            elif(l[5][0] <= x <= l[5][2] and l[5][1] <= y <= l[5][3]):
+                x = l[5][4]
+            elif(l[6][0] <= x <= l[6][2] and l[6][1] <= y <= l[6][3]):
+                x = l[6][4]
+            elif(l[7][0] <= x <= l[7][2] and l[7][1] <= y <= l[7][3]):
+                x = l[7][4]
+            elif(l[8][0] <= x <= l[8][2] and l[8][1] <= y <= l[8][3]):
+                x = l[8][4]
+            
                 
         img = frame
         height = img.shape[0]
         width = img.shape[1]
         
-        for x in range(height+100,height+1000,height+250):
-            cv2.line(img, (int(x/3), 0),(int(x/3), img.shape[0]), (0, 255, 0), 1, 1)
+        for xx in range(height+100,height+1000,height+250):
+            cv2.line(img, (int(xx/3), 0),(int(xx/3), img.shape[0]), (0, 255, 0), 1, 1)
         for y in range(150, width+1000, 200):
             cv2.line(img, pt1=(0, y), pt2=(width, y), color=(0,255,0), thickness=1)
         
@@ -160,32 +183,6 @@ def main(args=None):
     executor.add_high_priority_node(minimal_subscriber)
     executor.add_node(minimal_publisher)
     executor.spin()
-#-------------------------------------------------------------------------------
-  #  rclpy.init(args=args)
-
-#    minimal_publisher = MinimalPublisher()
- #   minimal_subscriber= MinimalSubscriber()
-
-  #  rclpy.spin(minimal_subscriber)
-
-   # rclpy.spin(minimal_publisher)
-
-    #minimal_publisher.destroy_node()
-    #MinimalSubscriber.destroy_node()
-    #rclpy.shutdown()
-
-
-#-------------------------------------------------------------------------------
-    #rclpy.init(args=args)
-
-    #self.minimal_publisher = MinimalPublisher()
- #   #rrospy.init_node('minimal_publisher', anonymous=True)
- #   self.minimal_publisher.retrieve_frames()
- #   print('HEREEEEEEEEEEEE')
- #   rospy.Subscriber(String, 'topic', JointState, listener_callback)
-    
-    #rospy.spin(minimal_publisher)
-
 
 if __name__ == '__main__':
     main()
