@@ -1,16 +1,3 @@
-// Copyright 2016 Open Source Robotics Foundation, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 #include <functional>
 #include <memory>
@@ -87,12 +74,15 @@ private:
     std::string gotGate = msg->data.c_str();
     int g = AUX->checkRegex(gotGate);
     if (g>0 && g<10){
+      RCLCPP_INFO(this->get_logger(), "I heared : %s", gotGate.c_str());
       gotGate = AUX->getPath(g);
       RCLCPP_INFO(this->get_logger(), "Subscribed %s", gotGate.c_str());
 
       auto message = std_msgs::msg::String();
       message.data = gotGate;
+      std::this_thread::sleep_for(std::chrono::milliseconds(150));
       publisher_->publish(message);
+      g = 0;
     }
   }
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
