@@ -68,6 +68,15 @@ class MinimalPublisher(Node):
                 #cv2.imshow('dilation',dilation)
                 contours, hierarchy = cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
                 my_list = []
+                l = [[0,0,192,150,'1st square'],
+                    [193,150,436,0,'2nd square'],
+                    [437,150,639,0,'3rd square'],
+                    [0,149, 193, 350,'4th square'],
+                    [194,151,438,349,'5th square'],
+                    [437,152,639,351,'6th square'],
+                    [0,350,193,477,'7th square'],
+                    [194,351,437,478,'8th sqaure'],
+                    [436,351,638,478,'9th square']]
                 for contour in contours:
                     (x, y, w, h) = cv2.boundingRect(contour)
                     if cv2.contourArea(contour) < 400:
@@ -86,9 +95,32 @@ class MinimalPublisher(Node):
                     else:
                         cv2.rectangle(frame, (my_list[1][0], my_list[1][1]),
                                     (my_list[2][0] + my_list[2][2], my_list[2][1] + my_list[2][3]), (0, 255, 255), 1)
+                        
                         cv2.putText(frame, "{}".format("Bonus"), (int(my_list[1][0]) + 20, int(my_list[1][1]) - 10),
                                     cv2.FONT_ITALIC, 2, (0, 255, 255))
-
+                        end_x = my_list[2][0] + my_list[2][2]
+                        end_y = my_list[2][1] + my_list[2][3]
+                        if(l[0][0]<=my_list[1][0]<=l[0][2]):
+                            print(l[0][4])
+                        else if (l[1][0]<=my_list[1][0]<=l[1][2]):
+                            print(l[1][4])
+                        else if(l[2][0]<=my_list[1][0]<=l[2][2]):
+                            print(l[2][4])
+                        else if(l[3][0]<=my_list[1][0]<=l[3][2]):
+                            print(l[3][4])
+                        else if(l[4][0]<=my_list[1][0]<=l[4][2]):
+                            print(l[4][4])
+                        else if(l[5][0]<=my_list[1][0]<=l[5][2]):
+                            print(l[5][4])
+                        else if(l[6][0]<=my_list[1][0]<=l[6][2]):
+                            print(l[6][4])
+                        else if(l[7][0]<=my_list[1][0]<=l[7][2]):
+                            print(l[7][4])
+                        else if(l[8][0]<=my_list[1][0]<=l[8][2]):
+                            print(l[8][4])
+                        else if(l[9][0]<=my_list[1][0]<=l[9][2]):
+                            print(l[9][4])
+                        
                 #cv2.imshow('contour', frame)
                 #if cv2.waitKey(10) & 0xFF == ord('q'):
                 #    break
